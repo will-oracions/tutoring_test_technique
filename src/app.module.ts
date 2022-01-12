@@ -1,5 +1,7 @@
+import { CourseModule } from '@Courses/course.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '@Users/user.module';
 
 @Module({
   controllers: [],
@@ -8,7 +10,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class AppModule {
   static forRoot(connectionOptions) {
     return {
-      imports: [TypeOrmModule.forRoot(connectionOptions)],
+      module: AppModule,
+      imports: [
+        TypeOrmModule.forRoot(connectionOptions),
+        CourseModule,
+        UserModule,
+      ],
       controllers: [],
       providers: [],
     };
