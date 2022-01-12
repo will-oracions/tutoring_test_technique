@@ -1,11 +1,25 @@
+import { CourseCreateDto } from '@Courses/dto/course-create.dto';
 import { CourseListDto } from '@Courses/dto/course-list.dto';
 import { CourseDto } from '@Courses/dto/course.dto';
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CourseService } from './course.service';
 
 @Controller('courses')
 export class CourseController {
   constructor(private readonly service: CourseService) {}
+
+  @Post()
+  async create(@Body() body: CourseCreateDto): Promise<CourseDto> {
+    return this.service.create(body);
+  }
 
   @Get()
   async getAll(): Promise<CourseListDto> {

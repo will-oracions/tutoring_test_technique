@@ -1,9 +1,8 @@
 import { UserRoleEnum } from '@Users/user.entity';
 import { IsNotEmpty } from 'class-validator';
-import { UserDto } from './user.dto';
 
 export class UserCreateDto {
-  @IsNotEmpty() id: string;
+  @IsNotEmpty() id?: string;
 
   @IsNotEmpty() firstName: string;
 
@@ -17,5 +16,5 @@ export class UserCreateDto {
 
   @IsNotEmpty() role?: UserRoleEnum;
 
-  parent?: UserDto;
+  parentId?: string;
 }

@@ -1,3 +1,4 @@
+import { CourseCreateDto } from '@Courses/dto/course-create.dto';
 import { CourseListDto } from '@Courses/dto/course-list.dto';
 import { CourseDto } from '@Courses/dto/course.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -12,6 +13,15 @@ export class CourseService {
     @InjectRepository(CourseEntity)
     private readonly repo: Repository<CourseEntity>,
   ) {}
+
+  async create(body: CourseCreateDto): Promise<CourseDto> {
+    const { title } = body;
+
+    const course: CourseEntity = this.repo.create({ title });
+
+    await this.repo.save(course);
+    return toCourseDto(course);
+  }
 
   async getAll(): Promise<CourseListDto> {
     const courses: CourseEntity[] = await this.repo.find();
@@ -55,6 +65,8 @@ export class CourseService {
     if (!course) {
       throw new HttpException('Not exist', HttpStatus.NOT_FOUND);
     }
+
+    await this.repo.delete({ id });
 
     return true;
   }

@@ -8,15 +8,15 @@ export enum UserRoleEnum {
 }
 
 export enum UserAccountStatusEnum {
-  ACTIVATED = 'ACTIVATED',
-  DEACTIVATED = 'DEACTIVATED',
-  BLOCKED = 'BLOCKED',
-  DELETED = 'DELETED',
+  DEACTIVATED = 0,
+  ACTIVATED = 1,
+  BLOCKED = 2,
+  DELETED = 3,
 }
 
 @Entity('users')
 export class UserEntity {
-  @PrimaryGeneratedColumn() id: string;
+  @PrimaryGeneratedColumn('uuid') id: string;
   @Column({ type: 'varchar', nullable: false }) firstName: string;
 
   @Column({ type: 'varchar', nullable: false }) lastName: string;

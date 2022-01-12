@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { getConnectionOptions } from 'typeorm';
 import { runMigrations } from './db/setup';
 
@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(
     AppModule.forRoot(await getConnectionOptions(process.env.NODE_ENV)),
   );
-
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(PORT);
 
   await runMigrations();
