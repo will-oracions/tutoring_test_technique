@@ -1,0 +1,42 @@
+[
+  {
+    "name": "development",
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3366,
+    "username": "Louis",
+    "password": "louis",
+    "database": "tutoring_db",
+    "synchronize": false,
+    "logging": true,
+    "entities": ["dist/**/*.entity.js"],
+    "migrations": [
+      "dist/migrations/**/*.js"
+    ],
+    "cli": {
+      "entitiesDir": "src",
+      "migrationsDir": "src/migrations",
+      "subscribersDir": "src/subscribers"
+    }
+  },
+  {
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3366,
+    "username": "Louis",
+    "password": "louis",
+    "database": "tutoring_db",
+    "synchronize": false,
+    "logging": true,
+    "entities": ["dist/**/*.entity.js"],
+    "migrations": [
+      "dist/migrations/**/*.js"
+    ],
+    "cli": {
+      "entitiesDir": "src",
+      "migrationsDir": "src/migrations",
+      "subscribersDir": "src/subscribers"
+    }
+  }
+    
+]
