@@ -4,7 +4,9 @@ import { UserCreateDto } from '@Users/dto/user-create.dto';
 import { UserListDto } from '@Users/dto/user-list.dto';
 import { UserDto } from '@Users/dto/user.dto';
 import { UserEntity } from '@Users/user.entity';
+import { LoginDto } from 'src/modules/auth/dto/login.dto';
 import { toUserDto } from 'src/shared/mapper';
+import { comparePasswords } from 'src/shared/utils';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,6 +18,18 @@ export class UserService {
   async create(body: UserCreateDto): Promise<UserDto> {
     const { firstName, lastName, email, password, birthday, role, parentId } =
       body;
+
+      const userInDb = await this.repo.findOne({
+        where: { email },
+      });
+  
+      if (userInDb) {
+        throw new HttpException(
+        'User already exist in database',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+  
 
     const payload = { firstName, lastName, email, birthday, role, password };
 
@@ -53,6 +67,22 @@ export class UserService {
     return toUserDto(user);
   }
 
+  async findByLogin({ email, password }: LoginDto): Promise<UserDto> {
+    const user: UserEntity = await this.repo.findOne({ where: { email } });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const isEqual = await comparePasswords(user.password, password);
+
+    if (!isEqual) {
+      throw new HttpException('Invalid creadentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return user;
+  }
+
   async update(id: string, body: Partial<UserDto>): Promise<UserDto> {
     const { firstName, lastName, email, birthday, role, accountStatus } = body;
 
@@ -62,6 +92,7 @@ export class UserService {
       throw new HttpException('Model not found', HttpStatus.NOT_FOUND);
     }
 
+    // @ts-ignore
     user = {
       ...user,
       firstName: firstName ? firstName : user.firstName,
@@ -93,5 +124,10 @@ export class UserService {
     await this.repo.delete({ id });
 
     return true;
+  }
+
+  async findByPayload({ email }: any): Promise<UserDto> {
+    const user = await this.repo.findOne({ where: { email } });
+    return toUserDto(user);
   }
 }

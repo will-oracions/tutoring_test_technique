@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 export enum UserRoleEnum {
   STUDENT = 0,
@@ -21,7 +28,7 @@ export class UserEntity {
 
   @Column({ type: 'varchar', nullable: false }) lastName: string;
 
-  @Column({ type: 'varchar', nullable: false }) email: string;
+  @Column({ type: 'varchar', nullable: false, unique: true }) email: string;
 
   @Column({ type: 'varchar', nullable: false }) password: string;
 
@@ -41,4 +48,8 @@ export class UserEntity {
 
   @OneToMany((type) => UserEntity, (user) => user.parent)
   parent?: UserEntity;
+
+  @BeforeInsert() async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }
