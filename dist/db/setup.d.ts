@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export declare const getDbConnectionOptions: (name?: string) => Promise<{
     name: string;
     type: "mysql" | "mariadb";
